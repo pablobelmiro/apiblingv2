@@ -13,13 +13,11 @@ class CreatePedidoVolumes extends Migration
      */
     public function up()
     {
-        Schema::create('pedido_volumes', function (Blueprint $table) {
+        Schema::create('pedidovolumes', function (Blueprint $table) {
             $table->id();
 
             $table->unsignedBigInteger('id_pedido');
-            $table->foreign('id_pedido')->references('id')->on('pedidos');
 
-            $table->string('id', 50)->nullable();
             $table->string('idServico', 50)->nullable();
             $table->string('idOrigem', 50)->nullable();
             $table->string('servico', 100)->nullable();
@@ -53,6 +51,6 @@ class CreatePedidoVolumes extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('pedido_volumes');
+        Schema::dropIfExists('pedidovolumes');
     }
 }

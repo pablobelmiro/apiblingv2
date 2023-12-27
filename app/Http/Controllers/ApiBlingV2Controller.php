@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use App\Models\Pedido;
 
 class ApiBlingV2Controller extends Controller
 {
@@ -18,7 +19,7 @@ class ApiBlingV2Controller extends Controller
 
         //inicalizando variáveis
         $dtAtual = Carbon::now();
-        $dtInicial = Carbon::now()->firstOfMonth();
+        $dtInicial = $dtAtual->addDay(-7)->copy();
         $token = ''; //Aqui vai o seu token para usuário API
         $endpoint = 'https://bling.com.br/Api/v2/pedidos/json/';
         $dtEmissaoFormatada = strval($dtInicial).' TO '.strval($dtAtual);
@@ -26,6 +27,7 @@ class ApiBlingV2Controller extends Controller
 
         Log::debug("dtInicial => ".$dtInicial. ' dtAtual => '.$dtAtual);
 
+        /*
         $response = Http::get($endpoint, [
             'apikey' => $token,
             'filters=dataEmissao' => $dtEmissaoFormatada.';idSituacao['.$idSituacao.']'
@@ -38,10 +40,6 @@ class ApiBlingV2Controller extends Controller
             $listaPedidos->each(function ($pedido, $key){
                 $pedido = Pedido::where('numeroPedidoLoja', '=', $pedido['numeroPedidoLoja']);
             });
-
-
-
-            return response()->json(['Cadastro realizado com sucesso'], 200);
         }else{
             $mensagem = [
                 'mensagem' => 'Requisição na API Bling V2 não foi possível ser realizada',
@@ -49,6 +47,6 @@ class ApiBlingV2Controller extends Controller
             ];
             
             return response()->json($mensagem);
-        }
+        }*/
     }
 }

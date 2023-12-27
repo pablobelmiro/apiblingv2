@@ -17,50 +17,50 @@ class CreatePedidos extends Migration
             $table->id();
 
             //Dados gerais pedido
-            $table->float('desconto', 10, 2);
-            $table->text('observacoes');
-            $table->text('observacaointerna');
-            $table->date('data');
-            $table->string('numero', 50)->nullable();
-            $table->string('numeroOrdemCompra', 50)->nullable();
-            $table->string('vendedor', 100)->nullable();
-            $table->float('valorfrete', 10, 2)->nullable();
-            $table->float('outrasdespesas', 10, 2)->nullable();
-            $table->float('totalprodutos', 10, 2)->nullable();
-            $table->float('totalvenda', 10, 2)->nullable();
-            $table->string('situacao', 100)->nullable();
-            $table->date('dataSaida')->nullable();
-            $table->string('loja', 100)->nullable();
-            $table->string('numeroPedidoLoja', 100)->nullable();
-            $table->string('tipoIntegracao', 100)->nullable();
+            $table->float('descontoPed', 10, 2);
+            $table->text('observacoesPed');
+            $table->text('observacaointernaPed');
+            $table->date('dataPed');
+            $table->string('numeroPedidoPed', 50)->nullable();
+            $table->string('numeroOrdemCompraPed', 50)->nullable();
+            $table->string('vendedorPed', 100)->nullable();
+            $table->float('valorfretePed', 10, 2)->nullable();
+            $table->float('outrasdespesasPed', 10, 2)->nullable();
+            $table->float('totalprodutosPed', 10, 2)->nullable();
+            $table->float('totalvendaPed', 10, 2)->nullable();
+            $table->string('situacaoPed', 100)->nullable();
+            $table->date('dataSaidaPed')->nullable();
+            $table->string('lojaPed', 100)->nullable();
+            $table->string('numeroPedLoja', 100)->nullable();
+            $table->string('tipoIntegracaoPed', 100)->nullable();
 
             //Dados cliente
-            $table->string('idcliente', 100)->nullable();
-            $table->string('nome', 255)->nullable();
-            $table->string('documento', 15)->nullable();
-            $table->string('ie', 10)->nullable();
-            $table->string('indIEDest', 10)->nullable();
-            $table->string('rg', 10)->nullable();
-            $table->string('endereco', 255)->nullable();
-            $table->string('numero', 10)->nullable();
-            $table->text('complemento')->nullable();
-            $table->string('cidade', 100)->nullable();
-            $table->string('bairro', 100)->nullable();
-            $table->string('cep', 10)->nullable();
-            $table->string('uf', 2)->nullable();
-            $table->string('email', 255)->nullable();
-            $table->string('celular', 20)->nullable();
-            $table->string('fone', 20)->nullable();
+            $table->string('idClie', 100)->nullable();
+            $table->string('nomeClie', 255)->nullable();
+            $table->string('docClie', 15)->nullable();
+            $table->string('ieClie', 10)->nullable();
+            $table->string('indIEClie', 10)->nullable();
+            $table->string('rgClie', 10)->nullable();
+            $table->string('enderecoClie', 255)->nullable();
+            $table->string('numeroCasaClie', 10)->nullable();
+            $table->text('complementoClie')->nullable();
+            $table->string('cidadeClie', 100)->nullable();
+            $table->string('bairroClie', 100)->nullable();
+            $table->string('cepClie', 10)->nullable();
+            $table->string('ufClie', 2)->nullable();
+            $table->string('emailClie', 255)->nullable();
+            $table->string('celularClie', 20)->nullable();
+            $table->string('foneClie', 20)->nullable();
 
             //Dados pagamento
             $table->string('categoria', 255)->nullable();
 
             //Dados nf-e
-            $table->string('serie', 5)->nullable();
-            $table->string('numero', 10)->nullable();
-            $table->dateTime('dataEmissao')->nullable();
-            $table->string('situacao', 2)->nullable();
-            $table->float('valorNota', 15, 2)->nullable();
+            $table->string('serieNf', 5)->nullable();
+            $table->string('numeroNf', 10)->nullable();
+            $table->dateTime('dataEmissaoNf')->nullable();
+            $table->string('situacaoNf', 2)->nullable();
+            $table->float('valorNf', 15, 2)->nullable();
             $table->string('chaveAcesso', 45)->nullable();
 
             //Dados Transporte

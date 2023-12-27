@@ -13,11 +13,11 @@ class CreatePedidoItem extends Migration
      */
     public function up()
     {
-        Schema::create('pedido_item', function (Blueprint $table) {
+        Schema::create('pedidoitem', function (Blueprint $table) {
             $table->id();
 
             $table->unsignedBigInteger('id_pedido');
-            $table->foreign('id_pedido')->references('id')->on('pedidos');
+            //$table->foreign('id_pedido')->references('id')->on('pedidos');
 
             $table->string('codigo', 100);
             $table->text('descricao');
@@ -26,9 +26,9 @@ class CreatePedidoItem extends Migration
             $table->float('descontoItem', 10, 2);
             $table->string('un', 4);
             $table->double('pesoBruto', 15, 5);
-            $table->integer('largura', 5);
-            $table->integer('altura', 5);
-            $table->integer('profundidade', 5);
+            $table->float('largura', 5);
+            $table->float('altura', 5);
+            $table->float('profundidade', 5);
             $table->text('descricaoDetalhada');
             $table->string('unidadeMedida', 5);
             $table->string('gtin', 100);
@@ -45,6 +45,6 @@ class CreatePedidoItem extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('pedido_item');
+        Schema::dropIfExists('pedidoitem');
     }
 }
