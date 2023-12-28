@@ -22,6 +22,7 @@ class CreatePedidoItem extends Migration
             $table->string('codigo', 100);
             $table->text('descricao');
             $table->double('quantidade', 20, 10);
+            $table->float('valorunidade', 10, 2);
             $table->float('precocusto', 10, 2);
             $table->float('descontoItem', 10, 2);
             $table->string('un', 4);

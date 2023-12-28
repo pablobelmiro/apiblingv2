@@ -11,50 +11,40 @@ class volume extends Model
     use HasFactory;
     use SoftDeletes;
 
-    public $table = 'pedidoitem';
+    public $table = 'pedidovolumes';
     protected $dates = ['deleted_at'];
 
     protected $fillable = [
         'id_pedido',
-        'idServico',
-        'idOrigem',
-        'servico',
-        'codigoServico',
-        'codigoRastreamento',
-        'valorFretePrevisto',
-        'remessa',
-        'dataSaida',
-        'prazoEntregaPrevisto',
-        'valorDeclarado',
-        'avisoRecebimento',
-        'maoPropria',
-        'peso',
-        'altura',
-        'largura',
-        'comprimento',
-        'diametro',
-        'urlRastreamento'
+        'transportadora',
+        'cnpj',
+        'tipo_frete',
+        'qtde_volumes',
+        'peso_bruto',
+        'nome',
+        'endereco',
+        'numero',
+        'complemento',
+        'cidade',
+        'bairro',
+        'cep',
+        'uf'
     ];
 
     protected $casts = [
-        'id_pedido' => 'string',
-        'idServico' => 'string',
-        'idOrigem' => 'string',
-        'servico' => 'string',
-        'codigoServico' => 'string',
-        'codigoRastreamento' => 'string',
-        'valorFretePrevisto' => 'float',
-        'remessa' => 'string',
-        'dataSaida' => 'date',
-        'prazoEntregaPrevisto' => 'date',
-        'valorDeclarado' => 'float',
-        'avisoRecebimento' => 'string',
-        'maoPropria' => 'string',
-        'peso' => 'string',
-        'altura' => 'string',
-        'largura' => 'string',
-        'comprimento' => 'string',
-        'diametro' => 'string',
-        'urlRastreamento' => 'string'
+        'id_pedido' => 'integer',
+        'transportadora' => 'string',
+        'cnpj' => 'string',
+        'tipo_frete' => 'string',
+        'qtde_volumes' => 'float',
+        'peso_bruto' => 'float',
+        'nome' => 'string',
+        'endereco' => 'string',
+        'numero' => 'string',
+        'complemento' => 'string',
+        'cidade' => 'string',
+        'bairro' => 'string',
+        'cep' => 'string',
+        'uf' => 'string'
     ];
 }

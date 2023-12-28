@@ -24,7 +24,6 @@ class CreatePedidoParcelas extends Migration
             $table->dateTime('dataVencimento');
             $table->text('obs');
             $table->unsignedTinyInteger('destino');
-            $table->unsignedBigInteger('id_formapagamento');
 
             $table->timestamps();
             $table->softDeletes();

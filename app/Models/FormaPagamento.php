@@ -11,7 +11,7 @@ class FormaPagamento extends Model
     use HasFactory;
     use SoftDeletes;
 
-    public $table = 'pedidoparcelas';
+    public $table = 'formapagamento';
     protected $dates = ['deleted_at'];
 
     protected $fillable = [
@@ -19,7 +19,7 @@ class FormaPagamento extends Model
         'id_formapagamento',
         'codigo',
         'descricao',
-        'codigoFiscal',
+        'codigoFiscal'
     ];
 
     protected $casts = [
@@ -27,6 +27,6 @@ class FormaPagamento extends Model
         'id_formapagamento' => 'integer',
         'codigo' => 'string',
         'descricao' => 'string',
-        'codigoFiscal' => 'string',
+        'codigoFiscal' => 'string'
     ];
 }

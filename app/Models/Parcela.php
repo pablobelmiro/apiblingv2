@@ -20,8 +20,7 @@ class Parcela extends Model
         'valor',
         'dataVencimento',
         'obs',
-        'destino',
-        'id_formapagamento'
+        'destino'
     ];
 
     protected $casts = [
@@ -30,7 +29,6 @@ class Parcela extends Model
         'valor' => 'float',
         'dataVencimento' => 'dateTime',
         'obs' => 'string',
-        'destino' => 'integer',
-        'id_formapagamento' => 'integer'
+        'destino' => 'integer'
     ];
 }

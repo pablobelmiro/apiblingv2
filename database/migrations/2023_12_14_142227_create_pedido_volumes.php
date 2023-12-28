@@ -18,26 +18,19 @@ class CreatePedidoVolumes extends Migration
 
             $table->unsignedBigInteger('id_pedido');
 
-            $table->string('idServico', 50)->nullable();
-            $table->string('idOrigem', 50)->nullable();
-            $table->string('servico', 100)->nullable();
-            $table->string('codigoServico', 100)->nullable();
-            $table->string('codigoRastreamento', 100)->nullable();
-            $table->float('valorFretePrevisto', 10, 2)->nullable();
-            $table->string('remessa', 100)->nullable();
-            $table->date('dataSaida')->nullable();
-            $table->date('prazoEntregaPrevisto')->nullable();
-            $table->float('valorDeclarado', 15, 2)->nullable();
-            $table->string('avisoRecebimento', 10)->nullable();
-            $table->string('maoPropria', 10)->nullable();
-
-            //Dados dimensões
-            $table->string('peso')->nullable();
-            $table->string('altura')->nullable();
-            $table->string('largura')->nullable();
-            $table->string('comprimento')->nullable();
-            $table->string('diametro')->nullable();
-            $table->string('urlRastreamento', 2000)->nullable();
+            $table->string('transportadora');
+            $table->string('cnpj');
+            $table->string('tipo_frete');
+            $table->float('qtde_volumes', 10, 2);
+            $table->float('peso_bruto', 10, 2);
+            $table->string('nome', 255);
+            $table->string('endereco', 255);
+            $table->string('numero', 50);
+            $table->string('complemento', 500);
+            $table->string('cidade', 100);
+            $table->string('bairro', 100);
+            $table->string('cep', 12);
+            $table->string('uf', 3);
 
             $table->timestamps();
             $table->softDeletes();

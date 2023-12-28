@@ -2,11 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\FormaPagamento;
+use App\Models\Item;
+use App\Models\Parcela;
+use App\Models\Pedido;
+use App\Models\volume;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
-use App\Models\Pedido;
+
 
 class ApiBlingV2Controller extends Controller
 {
@@ -34,14 +39,8 @@ class ApiBlingV2Controller extends Controller
            
             $listaPedidos = collect($response->json()); //separando apenas lista de pedidos
 
-            //Log::debug('type of listaPedidos ===> '.json_encode($listaPedidos));
-            Log::debug('type of listaPedidos ===> '.gettype($listaPedidos));
-
             foreach($listaPedidos['retorno']['pedidos'] as $pedido){
-                log::debug('Pedido ===> '.json_encode($pedido));
-                Log::debug('type of listaPedidos ===> '.gettype($listaPedidos));
                 $flag = $this->trataDadosPedido($pedido);
-                Log::debug('flag ==> '.$flag);
             }
         }else{
             $mensagem = [
@@ -57,41 +56,41 @@ class ApiBlingV2Controller extends Controller
         Log::debug('trataDadosPedido');
         Log::debug('trataDadosPedido pedido ==> '.json_encode($pedido));
 
-        $pedidoFillable = [
-            'descontoPed' => $pedido['pedido']['desconto'],
-            'observacoesPed' => $pedido['pedido']['observacoes'],
-            'observacaointernaPed' => $pedido['pedido']['observacaointerna'],
+        $fillable = [
+            'descontoPed' => $pedido['pedido']['desconto'] ?? null,
+            'observacoesPed' => $pedido['pedido']['observacoes'] ?? null,
+            'observacaointernaPed' => $pedido['pedido']['observacaointerna'] ?? null,
             'dataPed' => $pedido['pedido']['data'],
             'numeroPedidoPed' => $pedido['pedido']['numero'],
-            'numeroOrdemCompraPed' => $pedido['pedido']['numeroOrdemCompra'],
-            'vendedorPed' => $pedido['pedido']['vendedor'],
-            'valorfretePed' => $pedido['pedido']['valorfrete'],
-            'outrasdespesasPed' => $pedido['pedido']['outrasdespesas'],
-            'totalprodutosPed' => $pedido['pedido']['totalprodutos'],
-            'totalvendaPed' => $pedido['pedido']['totalvenda'],
-            'situacaoPed' => $pedido['pedido']['situacao'],
-            'dataSaidaPed' => $pedido['pedido']['dataSaida'],
-            'lojaPed' => $pedido['pedido']['loja'],
-            'numeroPedLoja' => $pedido['pedido']['numeroPedidoLoja'],
-            'tipoIntegracaoPed' => $pedido['pedido']['tipoIntegracao'],
+            'numeroOrdemCompraPed' => $pedido['pedido']['numeroOrdemCompra'] ?? null,
+            'vendedorPed' => $pedido['pedido']['vendedor'] ?? null,
+            'valorfretePed' => $pedido['pedido']['valorfrete'] ?? null,
+            'outrasdespesasPed' => $pedido['pedido']['outrasdespesas'] ?? null,
+            'totalprodutosPed' => $pedido['pedido']['totalprodutos'] ?? null,
+            'totalvendaPed' => $pedido['pedido']['totalvenda'] ?? null,
+            'situacaoPed' => $pedido['pedido']['situacao'] ?? null,
+            'dataSaidaPed' => $pedido['pedido']['dataSaida'] ?? null,
+            'lojaPed' => $pedido['pedido']['loja'] ?? null,
+            'numeroPedLoja' => $pedido['pedido']['numeroPedidoLoja'] ?? null,
+            'tipoIntegracaoPed' => $pedido['pedido']['tipoIntegracao'] ?? null,
 
             //Dados cliente
             'idClie' => $pedido['pedido']['cliente']['id'],
             'nomeClie' => $pedido['pedido']['cliente']['nome'],
             'docClie' => $pedido['pedido']['cliente']['cnpj'],
-            'ieClie' => $pedido['pedido']['cliente']['ie'],
-            'indIEClie' => $pedido['pedido']['cliente']['indIEDest'],
-            'rgClie' => $pedido['pedido']['cliente']['rg'],
+            'ieClie' => $pedido['pedido']['cliente']['ie'] ?? null,
+            'indIEClie' => $pedido['pedido']['cliente']['indIEDest'] ?? null,
+            'rgClie' => $pedido['pedido']['cliente']['rg'] ?? null,
             'enderecoClie' => $pedido['pedido']['cliente']['endereco'],
             'numeroCasaClie' => $pedido['pedido']['cliente']['numero'],
-            'complementoClie' => $pedido['pedido']['cliente']['complemento'],
+            'complementoClie' => $pedido['pedido']['cliente']['complemento'] ?? null,
             'cidadeClie' => $pedido['pedido']['cliente']['cidade'],
             'bairroClie' => $pedido['pedido']['cliente']['bairro'],
             'cepClie' => $pedido['pedido']['cliente']['cep'],
             'ufClie' => $pedido['pedido']['cliente']['uf'],
-            'emailClie' => $pedido['pedido']['cliente']['email'],
-            'celularClie' => $pedido['pedido']['cliente']['celular'],
-            'foneClie' => $pedido['pedido']['cliente']['fone'],
+            'emailClie' => $pedido['pedido']['cliente']['email'] ?? null,
+            'celularClie' => $pedido['pedido']['cliente']['celular'] ?? null,
+            'foneClie' => $pedido['pedido']['cliente']['fone'] ?? null,
 
             //Dados nfe
             'serieNf' => $pedido['pedido']['nota']['serie'] ?? null,
@@ -117,28 +116,161 @@ class ApiBlingV2Controller extends Controller
             'enderecoEntregaUf' => $pedido['pedido']['transporte']['enderecoEntrega']['Uf'] ?? null,
         ];
 
-        Log::debug('fillable ==> '.json_encode($pedidoFillable));
-        $pedido = Pedido::select('id')->where('numeroPedLoja', '=', $pedido['pedido']['numeroPedidoLoja'])->first();
+        Log::debug('fillable ==> '.json_encode($fillable));
+        $pedidoModel = Pedido::where('numeroPedLoja', '=', $pedido['pedido']['numeroPedidoLoja'])->first();
 
-        if($pedido > 0){
+        if(!is_null($pedidoModel)){
             Log::debug('Pedido Já existente ==> '.$pedido);
         }else{
-            //$pedido = Pedido::create($pedidoFillable);
-            Log::debug('vai criar um pedido novo');
-            //Log::debug('Novo pedido foi criado! Id ==> '.$pedido['id']);
+            $pedidoModel = Pedido::create($fillable);
         }
 
-        //$item = $this->trataItem($pedido); 
-        return true;
+        //Tratando outros dados do pedido
+        $this->trataItem($pedido, $pedidoModel['id']);
+        $this->trataParcela($pedido, $pedidoModel['id']);
+        $this->trataDadosVolumes($pedido, $pedidoModel['id']);
     }
 
-    private function trataItem($pedido){
+    private function trataItem($pedido, $idPedido){
         Log::debug('trataItem');
 
-        $listaItens = $pedido['itens'];
+        $listaItens = $pedido['pedido']['itens'];
 
         foreach($listaItens as $item){
+            $fillable = [
+                'id_pedido' => $idPedido,
+                'codigo' => $item['item']['codigo'],
+                'descricao' => $item['item']['descricao'] ?? null,
+                'quantidade' => $item['item']['quantidade'],
+                'valorunidade' => $item['item']['valorunidade'],
+                'precocusto' => $item['item']['valorunidade'],
+                'descontoItem' => $item['item']['descontoItem'],
+                'un' => $item['item']['un'],
+                'pesoBruto' => $item['item']['pesoBruto'],
+                'largura' => $item['item']['largura'],
+                'altura' => $item['item']['altura'],
+                'profundidade' => $item['item']['profundidade'],
+                'descricaoDetalhada' => $item['item']['descricaoDetalhada'] ?? null,
+                'unidadeMedida' => $item['item']['unidadeMedida'] ?? null,
+                'gtin' => $item['item']['gtin']
+            ];
 
+            Log::debug('fillable de itens ===> '.json_encode($fillable));
+
+            // //verificar se já existe o item
+            $itemModel = Item::where('id_pedido', '=', $idPedido)
+                        ->where('gtin', '=', $item['item']['gtin'])
+                        ->get();
+            
+            if(!is_null($itemModel)){
+                //já existe o pedido, apenas atualizar os dados já existente
+            }else{
+                //Criando um novo pedido
+                $itemModel = item::create($fillable);
+            }
         }
     }
+
+    private function trataParcela($pedido, $idPedido){
+        Log::debug('trataParcela');
+
+        $listaParcelas = $pedido['pedido']['parcelas'] ?? null;
+
+        if(!is_null($listaParcelas)){
+            foreach($listaParcelas as $parcela){
+                $fillable = [
+                    'id_pedido' => $idPedido,
+                    'idLancamento' => $parcela['parcela']['idLancamento'] ?? null,
+                    'valor' => $parcela['parcela']['valor'] ?? null,
+                    'dataVencimento' => $parcela['parcela']['dataVencimento'] ?? null,
+                    'obs' => $parcela['parcela']['obs'] ?? null,
+                    'destino' => $parcela['parcela']['destino'] ?? null
+                ];
+    
+                Log::debug('fillable de parcela ===> '.json_encode($fillable));
+    
+                //verificar se já existe o item
+                $parcelaModel = Parcela::where('id_pedido', '=', $idPedido)
+                            ->where('gtin', '=', $parcela['parcela']['idLancamento'])
+                            ->get();
+                
+                if(!is_null($parcelaModel)){
+                    //já existe o pedido, apenas atualizar os dados já existente
+                }else{
+                    //Criando um novo pedido
+                    $parcelaModel = Parcela::create($fillable);
+                }
+    
+                $this->trataFormaPagamento($parcela, $parcelaModel['id'], $idPedido);
+            }
+        }
+    }
+
+    private function trataFormaPagamento($parcela, $idParcela, $idPedido){
+        Log::debug('trataFormaPagamento');
+
+        $formaPag = $parcela['parcela']['forma_pagamento'] ?? null;
+
+        if(!is_null($formaPag)){
+            $fillable = [
+                'id_pedido' => $idPedido,
+                'id_formapagamento' => $idParcela,
+                'codigo' => $formaPag['id'] ?? null,
+                'descricao' => $formaPag['descricao'] ?? null,
+                'codigoFiscal' => $formaPag['codigoFiscal'] ?? null
+            ];
+    
+            Log::debug('fillable de formaPag ===> '.json_encode($fillable));
+            //verificar se já existe o item
+            $formaPagModel = FormaPagamento::where('id_pedido', '=', $idPedido)
+                        ->where('id_formapagamento', '=', $idParcela)
+                        ->where('codigo', '=', $formaPag['id'])
+                        ->get();
+            
+            if(!is_null($formaPagModel)){
+                //já existe o pedido, apenas atualizar os dados já existente
+            }else{
+                //Criando um novo pedido
+                $formaPagModel = FormaPagamento::create($fillable);
+            }
+        }
+    }
+
+    private function trataDadosVolumes($pedido, $idPedido){
+        Log::debug('trataDadosVolumes');
+
+        $volume = $pedido['transporte'] ?? null;
+        if(!is_null($volume)){
+            
+        $fillable = [
+            'id_pedido' => $idPedido,
+            'transportadora' => $volume['transportadora'],
+            'cnpj' => $volume['cnpj'],
+            'tipo_frete' => $volume['tipo_frete'],
+            'qtde_volumes' => $volume['qtde_volumes'],
+            'peso_bruto' => $volume['peso_bruto'],
+            'nome' => $volume['nome'],
+            'endereco' => $volume['endereco'],
+            'numero' => $volume['numero'],
+            'complemento' => $volume['complemento'],
+            'cidade' => $volume['cidade'],
+            'bairro' => $volume['bairro'],
+            'cep' => $volume['cep'],
+            'uf' => $volume['uf']
+        ];
+
+        Log::debug('fillable de dados do volume ===> '.json_encode($fillable));
+
+        //verificar se já existe o volume
+         $volumeModel = Volume::where('id_pedido', '=', $idPedido)->get();
+        
+        if(!is_null($volumeModel)){
+            //já existe o pedido, apenas atualizar os dados já existente
+        }else{
+            //Criando um novo pedido
+            $volumeModel = Volume::create($fillable);
+        }
+        }
+    }
+
 }

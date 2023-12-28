@@ -19,6 +19,7 @@ class item extends Model
         'codigo',
         'descricao',
         'quantidade',
+        'valorunidade',
         'precocusto',
         'descontoItem',
         'un',
