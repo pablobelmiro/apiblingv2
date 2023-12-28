@@ -47,7 +47,6 @@ class Pedido extends Model
         'emailClie',
         'celularClie',
         'foneClie',
-        'categoria',
         'serieNf',
         'numeroNf',
         'dataEmissaoNf',
