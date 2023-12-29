@@ -17,11 +17,11 @@ class CreatePedidos extends Migration
             $table->id();
 
             //Dados gerais pedido
-            $table->float('descontoPed', 10, 2);
-            $table->text('observacoesPed');
-            $table->text('observacaointernaPed');
-            $table->date('dataPed');
-            $table->string('numeroPedidoPed', 50)->nullable();
+            $table->float('descontoPed', 15, 2)->nullable();
+            $table->text('observacoesPed')->nullable();
+            $table->text('observacaointernaPed')->nullable();
+            $table->date('dataPed')->nullable()->nullable();
+            $table->string('numeroPed', 50)->nullable();
             $table->string('numeroOrdemCompraPed', 50)->nullable();
             $table->string('vendedorPed', 100)->nullable();
             $table->float('valorfretePed', 10, 2)->nullable();

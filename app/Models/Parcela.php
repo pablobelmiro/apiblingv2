@@ -27,7 +27,7 @@ class Parcela extends Model
         'id_pedido' => 'string',
         'idLancamento' => 'string',
         'valor' => 'float',
-        'dataVencimento' => 'dateTime',
+        'dataVencimento' => 'datetime',
         'obs' => 'string',
         'destino' => 'integer'
     ];

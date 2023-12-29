@@ -14,7 +14,7 @@ class item extends Model
     public $table = 'pedidoitem';
     protected $dates = ['deleted_at'];
 
-    private $fillable = [
+    protected $fillable = [
         'id_pedido',
         'codigo',
         'descricao',
